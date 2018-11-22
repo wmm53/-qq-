@@ -3,6 +3,7 @@
 html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img {
     margin: 0;
     padding: 0;
+    font-family: poppin,Tahoma,Arial,\5FAE\8F6F\96C5\9ED1,sans-serif;
 }
 input{
     border: 1px solid #888888;
@@ -69,4 +70,33 @@ header ul li{
 }
 .main{
     background-color: #f3f3f3;
+}
+.songs-recommended a{
+
+    padding-left: 58px;
+}
+footer{
+    color: #999;
+}
+footer ul li{
+    float: left;
+    padding-left: 38px;
+    padding-bottom: 20px;
+}
+footer .footer-top{
+    padding-top: 66px;
+    display: flex;
+    flex-wrap: wrap;
+}
+footer a{
+    color: #999999;
+}
+footer a:hover{
+    color: #31c27c;
+}
+footer h4{
+    margin-bottom: 54px;
+}
+.bottomBanner{
+    height: 160px;
 }
