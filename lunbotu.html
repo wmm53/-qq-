@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小练习</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+        #container{
+            width: 590px;
+            height: 470px;
+            margin: 0 auto;
+            position:relative;
+            border: 3px solid #333;
+            overflow: hidden;//设置容器的宽高并将溢出部分隐藏
+        }
+        #imgList{
+            position: absolute;
+            z-index: 1;
+            height: 3290px ;
+            width: 4130px;//所有图片的总高度总宽度
+        }
+        img{
+            float: left;
+            height: 470px;
+            width: 590px;
+        }
+        #buttons{
+            position: absolute;
+            left: 250px;
+            bottom: 20px;
+            height: 10px;
+            width: 100px;
+            z-index: 2;
+        }
+        #buttons span{
+            float: left;
+            margin-right: 5px;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #fff;
+            border-radius: 50%;/* 半径为50%，即是设置为圆点显示*/
+            background: #333;
+            cursor: pointer;
+        }
+        #buttons .on{
+            background-color: firebrick;
+        }
+        .arrow{
+            position: absolute;
+            z-index: 2;
+            top: 180px;
+            display: none;
+            width: 40px;
+            height: 40px;
+            font-size: 36px;
+            font-weight: bold;
+            line-height: 39px;
+            text-align: center;
+            color: #fff;
+            background-color: rgba(0,0,0,.3);
+            cursor: pointer;
+        }
+        .arrow:hover{
+            background-color: rgba(0,0,0,.7);
+        }
+        #container:hover .arrow{
+            display: block;
+        }
+        #pre{
+            left: 20px;
+        }
+        #next{
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    // javascript 轮播图的实现
+    window.onload = function () {
+        // 1、设置左右按钮
+        var list=document.getElementById('imgList'); //获取图片元素的父级元素，并命名为list
+        // console.log(list.style.left+"fgrt")
+        var pre=document.getElementById('pre'); //获取左箭头
+        var next=document.getElementById('next'); //获取右箭头
+
+        function animate(offset){ //设置一个名为animate的函数，该函数接收一个参数
+
+            var newleft=parseInt(list.style.left)+offset; //获取图片的父级元素的左侧的定位值，并加上传入的参数offset
+
+            if(newleft<-2950){ //图片的父级div在移动的过程中，显示的图片的定位都是负值，如图3所示
+
+                list.style.left= -590+'px'; //但图片显示到五张图片上的最后一张时，自动跳转到第一张图片
+            }else if(newleft>-590){ //当在第一张图片上单击向左的按钮时，自动跳转到最后一张
+                list.style.left= -2950+'px';
+            }else{
+                list.style.left=newleft+'px';
+            }
+        }
+
+        // 设置定时器 每隔1.5秒切换一次
+        var timer = null
+        function autoPlay(){
+            timer = setInterval("next.onclick()",1500)
+        }
+        autoPlay()
+        function stop(){
+            clearInterval(timer)
+        }
+        var container = document.getElementById("container")
+        container.onmouseover = stop//鼠标移动到上方时清除定时器
+        container.onmouseout = autoPlay//鼠标离开时开始自动切换
+
+        //切换图片时小圆圈跟着切换
+        var buttons = document.getElementById("buttons").getElementsByTagName("span")
+        var index = 1 //第一张图片的index
+        function buttonLighted(){
+            for(var i=0;i<buttons.length;i++){
+                if(buttons[i].className=="on"){
+                    buttons[i].className=""
+                }
+            }
+            buttons[index-1].className = "on" //数组下标从零开始，所以index需要减1
+        }
+        pre.onclick = function () {
+            index=index-1
+            if(index<1){
+                index = 5
+            }
+            animate(590)
+            buttonLighted()
+            //alert("hjfghjsghh")
+        }
+
+        next.onclick = function () {
+            index=index+1
+            if(index>5){
+                index = 1
+            }
+            animate(-590)
+            buttonLighted()
+        }
+        // 点击任意一个小圆圈切换到对应图片
+        for(var i=0;i<buttons.length;i++){
+            (function (i){//使用立即执行函数
+                buttons[i].onclick= function () {
+                    var clickIndex=parseInt(this.getAttribute('index'));
+                    var offset=600*(index-clickIndex);
+                    animate(offset); //存放鼠标点击之后的位置，用于小圆点的正常显示
+                    index=clickIndex;
+                    buttonLighted();
+                }
+            })(i)
+        }
+
+    }
+</script>
+<div id="container">
+    <div id="imgList" style="left: -590px"><!-- 这里一定不能忘了设置初始left值，为了显示第一张图片 -->
+        <!-- 设置5张图片自动轮播，需要7张图片，因为每张图片都有向前和向后两种单击事件，第一张图片向前单击是最后一张图片，而最后一张图片单击是第一张图片，即第一张和最后一张都多设置一张-->
+        <!-- 图片尺寸 590 * 470-->
+        <img src="images/5.jpg" alt="">
+        <img src="images/1.jpg" alt="">
+        <img src="images/2.jpg" alt="">
+        <img src="images/3.jpg" alt="">
+        <img src="images/4.jpg" alt="">
+        <img src="images/5.jpg" alt="">
+        <img src="images/1.jpg" alt="">
+    </div>
+    <div id="buttons">
+        <!-- 设置单击小圆圈 -->
+        <span index="1" class="on"></span>
+        <span index="2"></span>
+        <span index="3"></span>
+        <span index="4"></span>
+        <span index="5"></span>
+    </div>
+    <!--设置向前和向后的箭头按钮-->
+    <a href="#" id="pre" class="arrow">&lt;</a>
+    <a href="#" id="next" class="arrow">&gt;</a>
+</div>
+</body>
+</html>
